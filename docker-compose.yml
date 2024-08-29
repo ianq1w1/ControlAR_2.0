@@ -1,0 +1,61 @@
+version: '3.8'
+
+
+services:
+  # Application Service
+  app:
+    container_name: controlar2.0
+    build:
+      context: ./php
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/var/www
+    ports:
+      - "9000:9000"
+    working_dir: /var/www
+    depends_on:
+      - db
+
+
+  # Database Service
+  db:
+    image: mysql:latest  # Usando a imagem correta do MySQL
+    container_name: controlar2.0db  # Nome do contêiner atualizado para refletir o uso do MySQL
+    volumes:
+      - ./mysql/data:/var/lib/mysql  # Diretório correto para persistência de dados MySQL
+    ports:
+      - "3306:3306"  # Porta padrão do MySQL
+    environment:
+      MYSQL_DATABASE: controlardb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root  # Define a senha do usuário root do MySQL
+
+  # Mosquitto Broker Service
+  mosquitto:
+    image: eclipse-mosquitto
+    container_name: controlar-broker
+    ports:
+      - "1883:1883" # Porta padrão do Mosquitto MQTT
+    # - "9001:9001" # Porta opcional para o protocolo WebSocket
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+
+
+  # Web Server Service
+  nginx:
+    image: nginx:alpine
+    container_name: nginx_controlar
+    ports:
+      - "8081:80"
+    volumes:
+      - ./src:/var/www
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+    depends_on:
+      - app
+      - db
+
+
+
