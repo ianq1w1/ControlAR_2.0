@@ -24,10 +24,10 @@ services:
     volumes:
       - ./mysql/data:/var/lib/mysql  # Diretório correto para persistência de dados MySQL
     ports:
-      - "3306:3306"  # Porta padrão do MySQL
+      - "3307:3306"  # Porta padrão do MySQL
     environment:
       MYSQL_DATABASE: controlardb
-      MYSQL_USER: root
+      #MYSQL_USER: root
       MYSQL_PASSWORD: root
       MYSQL_ROOT_PASSWORD: root  # Define a senha do usuário root do MySQL
 
@@ -49,7 +49,7 @@ services:
     image: nginx:alpine
     container_name: nginx_controlar
     ports:
-      - "8081:80"
+      - "8080:80"
     volumes:
       - ./src:/var/www
       - ./nginx/conf.d/:/etc/nginx/conf.d/

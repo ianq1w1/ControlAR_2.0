@@ -1,0 +1,5 @@
+# Ignorar arquivos e pastas específicas
+mysql/data/mysql.sock
+mysql/data/
+*.log
+*.sock
