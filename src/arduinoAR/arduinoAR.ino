@@ -4,24 +4,23 @@
 #include "SoftwareSerial.h"
 
 // WiFi
-const char *ssid = "Luffy"; // Enter your WiFi name
-const char *password = "12345678";  // Enter WiFi password
+const char *ssid = "xoxinha";         // Enter your WiFi name
+const char *password = "123456789";  // Enter WiFi password
 
 // MQTT Broker
 const char *mqtt_broker = "test.mosquitto.org";
 //const char *topic = "test";
-const char *mqtt_username = "";
-const char *mqtt_password = "";
+const char *mqtt_username = "capacita Digital";
+const char *mqtt_password = "20212021";
 const int mqtt_port = 1883;
-const char topic[]  = "test";
+const char topic[] = "test";
 
-const byte heatpumpOff         = 0;
-const byte heatpumpNormal      = 1;
+const byte heatpumpOff = 0;
+const byte heatpumpNormal = 1;
 const byte heatpumpMaintenance = 2;
 
 WiFiClient espClient;
 PubSubClient client(espClient);
-
 byte heatpumpState = heatpumpOff;
 IRSenderESP8266 irSender(12);
 HeatpumpIR *heatpumpIR = new MideaHeatpumpIR();
@@ -50,48 +49,47 @@ void setup() {
   // connecting to a WiFi network
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
-      delay(500);
-      Serial.println("conectando ao wifi..");
+    delay(500);
+    Serial.println("conectando ao wifi..");
   }
   Serial.println("conectado com a rede wifi");
 
   Serial.println(power_topic);
 
   while (!client.connected()) {
-      String client_id = "esp8266-client-";
-      client_id += String(WiFi.macAddress());
+    String client_id = "esp8266-client-";
+    client_id += String(WiFi.macAddress());
 
-      Serial.printf("o cliente bla blabla %s conecta no mqtt server publico\n", esp_id.c_str());
-     
-        if (client.connect(client_id.c_str())) {
-            Serial.println("mqtt broker conectado");
-            
-            client.publish("test", "esp_id");
+    Serial.printf("o cliente bla blabla %s conecta no mqtt server publico\n", esp_id.c_str());
 
-            client.subscribe(power_topic.c_str());
-            client.subscribe(mode_topic.c_str());
-            client.subscribe(fan_topic.c_str());
-            client.subscribe(temperature_topic.c_str());
-            client.subscribe(swing_topic.c_str());
-      } else {
-          Serial.print("deu merda ");
-          Serial.print(client.state());
-          delay(500);
-      }
+    if (client.connect(client_id.c_str())) {
+      Serial.println("mqtt broker conectado");
+
+      client.publish("test", "esp_id");
+
+      client.subscribe(power_topic.c_str());
+      client.subscribe(mode_topic.c_str());
+      client.subscribe(fan_topic.c_str());
+      client.subscribe(temperature_topic.c_str());
+      client.subscribe(swing_topic.c_str());
+    } else {
+      Serial.print("deu merda ");
+      Serial.print(client.state());
+      delay(500);
+    }
   }
 
-  delay(5000); 
+  delay(5000);
 }
 
 void callback(char *topic, byte *payload, unsigned int length) {
   String Payload = "";
-  for (int i = 0; i < length; i++) Payload += (char)payload[i] ;
+  for (int i = 0; i < length; i++) Payload += (char)payload[i];
   Serial.println(Payload);
   if (String(topic) == power_topic) {
     if (Payload == "ON") {
       power = POWER_ON;
-    }
-    else if (Payload == "OFF") {
+    } else if (Payload == "OFF") {
       power = POWER_OFF;
     }
   }
@@ -115,13 +113,13 @@ void callback(char *topic, byte *payload, unsigned int length) {
     if (Payload == "on") swing = VDIR_AUTO;
     else if (Payload == "off") swing = VDIR_SWING;
   }
-  
+
   Serial.println("power: " + String(power) + " - acmode: " + String(acmode) + " - fan: " + String(fan) + " - temp: " + String(temp) + " - swing: " + String(swing));
-  heatpumpIR->send(irSender, power, acmode, fan, temp, swing, 0);
+  heatpumpIR->send(irSender, Payload);
 }
 
 void loop() {
-  //enviando mensagem para o topico MQTT 
+  //enviando mensagem para o topico MQTT
   client.loop();
   delay(500);
 }
