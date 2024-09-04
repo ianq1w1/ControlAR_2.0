@@ -14,4 +14,12 @@ export default defineConfig({
             ],
         }),
     ],
+    build: {
+        outDir: 'public/build',
+        manifest: true,
+      },
+      server: {
+        host: true,  // This is needed to make it accessible in Docker
+      },
+    
 });
