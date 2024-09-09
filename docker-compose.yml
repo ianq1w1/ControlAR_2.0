@@ -9,6 +9,7 @@ services:
       - ./src:/var/www
     ports:
       - "9000:9000"
+      - "5173:5173"
     working_dir: /var/www
     depends_on:
       - db
@@ -54,9 +55,16 @@ services:
       - app
       - db
 
+ # Node Service
   node:
     build:
-      context: ./src
-      dockerfile: ../node/Dockerfile
+      context: .
+      dockerfile: ./node/Dockerfile
+    volumes:
+      - ./src:/var/www
     ports:
-      - "5173:5173"
+      - "3000:3000" 
+    working_dir: /var/www
+    depends_on:
+      - app
+

@@ -20,6 +20,9 @@ export default defineConfig({
       },
       server: {
         host: true,  // This is needed to make it accessible in Docker
+        port: 3000
       },
+
+          
     
 });
