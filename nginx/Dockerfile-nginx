@@ -1,0 +1,6 @@
+FROM nginx:latest
+
+
+WORKDIR /var/www
+COPY ./conf.d /etc/nginx/conf.d/
+#COPY ./src /var/www

@@ -1,4 +1,5 @@
 services:
+
   # Application Service
   app:
     container_name: controlar2.0
@@ -8,11 +9,12 @@ services:
     volumes:
       - ./src:/var/www
     ports:
-      - "9000:9000"
-      - "5173:5173"
+      - "8000:80"
+
     working_dir: /var/www
     depends_on:
       - db
+
 
 
   # Database Service
@@ -43,28 +45,18 @@ services:
 
 
   # Web Server Service
-  nginx:
-    image: nginx:alpine
-    container_name: nginx_controlar
-    ports:
-      - "8080:80"
-    volumes:
-      - ./src:/var/www
-      - ./nginx/conf.d/:/etc/nginx/conf.d/
-    depends_on:
-      - app
-      - db
-
- # Node Service
-  node:
-    build:
-      context: .
-      dockerfile: ./node/Dockerfile
-    volumes:
-      - ./src:/var/www
-    ports:
-      - "3000:3000" 
-    working_dir: /var/www
-    depends_on:
-      - app
+  # nginx:
+  #   build:
+  #     context: ./nginx
+  #     dockerfile: Dockerfile-nginx
+  #   container_name: nginx_controlar
+  #   ports:
+  #     - "8080:80"
+  #   volumes:
+  #     - ./src:/var/www
+  #     - ./nginx/conf.d/:/etc/nginx/conf.d/
+  #   depends_on:
+  #     - app
+  #     - db
+      
 

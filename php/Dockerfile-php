@@ -4,13 +4,9 @@ FROM php:8.2.12-fpm
 # Install Composer
 RUN echo "Install COMPOSER"
 RUN cd /tmp \
-    && curl -sS https://getcomposer.org/installer -o composer-setup.php \
-    && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
-    && rm composer-setup.php
-
-
-# Install required PHP extensions
-RUN docker-php-ext-install pdo pdo_mysql
+&& curl -sS https://getcomposer.org/installer -o composer-setup.php \
+&& php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
+&& rm composer-setup.php
 
 
 # Update package manager and install useful tools
@@ -35,25 +31,36 @@ RUN apt-get -y install --fix-missing \
     libicu-dev \
     libonig-dev \
     libxml2-dev 
+    
+
+    
 
 
 # Install Postgres PDO (adjust for Windows if needed)
-RUN apt-get install -y libpq-dev \
-    && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
-    && docker-php-ext-install pdo pdo_pgsql pgsql
+# RUN apt-get install -y libpq-dev \
+#     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
+#     && docker-php-ext-install pdo pdo_pgsql pgsql
 
+RUN docker-php-ext-install pdo_mysql
+
+# Install nginx server
+RUN apt-get install nginx -y
+
+WORKDIR /var/www
+
+COPY nginx.conf /etc/nginx/conf.d/
+
+COPY ../src /var/www
+
+#RUN composer install
+#RUN php artisan key:generate
 
 # Clean up
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Add any additional configurations or adjustments as needed
-
-
-# Set the working directory
-WORKDIR /var/www
 
 # Expose the port
-EXPOSE 9000
+EXPOSE 80
 
 # Define the entry point
-CMD ["php-fpm"]
+CMD  ["/bin/sh", "-c" , "service nginx start && php-fpm && composer install"]
