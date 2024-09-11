@@ -77,20 +77,20 @@
                         <div class="flex mt-6"> <!--- RELACIONADO OS BTN DE LIGAR E DESLIGAR --->
                             @if ($dispositivo->estado == 0)  <!--- Switch de OFF --->
                             <div class="w-10 h-10 rounded-full bg-red-600 animate-pulse flex items-center justify-center">
-                                <p class="text-white">off</p>
+                                <p class="text-white">Desl.</p>
                             </div>
-                            <form action="{{ route('dispositivos.estado', ['esp_id'=>$dispositivo->esp_id, 'message' => "ON"]) }}" method="POST">
+                            <form action="{{ route('dispositivos.estado', ['esp_id'=>$dispositivo->esp_id, 'message' => "Ligar"]) }}" method="POST">
                                 @csrf
-                                <button class="bg-green-500 text-white rounded-full py-2 px-4 ml-2" type="submit" value="on"> Ligar </button>
+                                <button class="bg-green-500 text-white rounded-full py-2 px-4 ml-2" type="submit" value="Ligar"> Ligar </button>
                             </form>
  
                             @elseif ($dispositivo->estado == 1) <!--- Switch de ON --->
                             <div class="w-10 h-10 rounded-full bg-green-600 animate-pulse flex items-center justify-center">
-                                <p class="text-white">on</p>
+                                <p class="text-white">Ligar</p>
                             </div>
-                            <form action="{{ route('dispositivos.estado', ['esp_id'=>$dispositivo->esp_id, 'message' => "OFF"])}}" method="POST">
+                            <form action="{{ route('dispositivos.estado', ['esp_id'=>$dispositivo->esp_id, 'message' => "Desligar"])}}" method="POST">
                                 @csrf
-                                <button class="bg-red-500 text-white rounded-full py-2 px-4 ml-2" type="submit" value="off"> Desligar </button>
+                                <button class="bg-red-500 text-white rounded-full py-2 px-4 ml-2" type="submit" value="Desligar"> Desligar </button>
                             </form>
                             @endif
                         </div>
