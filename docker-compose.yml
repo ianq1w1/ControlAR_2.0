@@ -4,8 +4,8 @@ services:
   app:
     container_name: controlar2.0
     build:
-      context: ./php
-      dockerfile: Dockerfile-php
+      context: .
+      dockerfile: ./php/Dockerfile-php
     volumes:
       - ./src:/var/www
     ports:
@@ -27,7 +27,7 @@ services:
       - "3307:3306"  # Porta padrão do MySQL
     environment:
       MYSQL_DATABASE: controlar2
-      MYSQL_USER: root
+      #MYSQL_USER: root
       MYSQL_PASSWORD: root
       MYSQL_ROOT_PASSWORD: root  # Define a senha do usuário root do MySQL
 

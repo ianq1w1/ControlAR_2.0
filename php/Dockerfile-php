@@ -48,12 +48,14 @@ RUN apt-get install nginx -y
 
 WORKDIR /var/www
 
-COPY nginx.conf /etc/nginx/conf.d/
+COPY ./php/nginx.conf /etc/nginx/conf.d/
 
-COPY ../src /var/www
+COPY ./src /var/www
 
-#RUN composer install
+RUN composer install
+
 #RUN php artisan key:generate
+
 
 # Clean up
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -63,4 +65,4 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 EXPOSE 80
 
 # Define the entry point
-CMD  ["/bin/sh", "-c" , "service nginx start && php-fpm && composer install"]
+CMD  ["/bin/sh", "-c" , "service nginx start && php-fpm"]
