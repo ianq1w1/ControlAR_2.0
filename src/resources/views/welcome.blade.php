@@ -25,7 +25,7 @@
 </nav>
 
 <body>
-  <div class="h-screen bg-cover bg-center relative" style="background-image: url('https://i.ibb.co/0jwZyCN/New-Canvas1.png');">
+  <div class="h-screen bg-cover bg-center relative" style="background-image: url('https://i.ibb.co/m6hbhm9/arcondiocionado.png');">
     <div class="absolute inset-0 bg-gradient-to-r from-transparent to-white"></div> <!--- Deixa transparente --->
     <div class="text-blue-500 absolute inset-0 flex flex-col items-end justify-center p-8">
       <h1 class="text-4xl text-slate-700 font-bold mb-4 text-center">ControlAR</h1>
